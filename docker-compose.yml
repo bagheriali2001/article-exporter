@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+
+  article-exporter:
+    image: article-exporter:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: article-exporter
+    restart: always
+    networks:
+      - main_network
+    env_file:
+      - ./.env
+    volumes:
+      - /data/article-exporter/data:/home/node/app/data
+      - /data/article-exporter/articles:/home/node/app/static/articles
+
+networks:
+  main_network:
+    name: main_network
+    external: true
