@@ -47,7 +47,6 @@ async function exporting() {
                                 console.log("Sending email...");
                                 console.log("queue_item.email:", queue_item.emails);
 
-
                                 if (queue_item.emails) {
                                     for (let email of queue_item.emails) {
                                         await sendEmail(email, {

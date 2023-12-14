@@ -10,6 +10,15 @@ export async function POST({ request, url }) {
 	try {
 		const { fetch_url, email } = await request.json();
 		
+		// fetch_url validation
+		if (!fetch_url) {
+			return json({ error: "The fetch_url is required" }, { status: 400 });
+		} else if (typeof fetch_url !== "string") {
+			return json({ error: "The fetch_url should be a string" }, { status: 400 });
+		} else if (!fetch_url.startsWith("https://www.scientificamerican.com/article/")) {
+			return json({ error: "The url should be a Scientific American article url !" }, { status: 400 });
+		}
+		
 		const article_already_exists = await Article.findOne({
 			where: {
 				url: fetch_url

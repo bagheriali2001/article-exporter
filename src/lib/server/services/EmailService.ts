@@ -1,5 +1,7 @@
-import axios from "axios";
-import { BASE_URL, MAILSENDER_EMAIL, MAILSENDER_API_TOKEN } from '$env/static/private'
+import Postal from '@atech/postal';
+import { BASE_URL, POSTAL_ADDRESS, POSTAL_API_KEY, POSTAL_EMAIL } from '$env/static/private'
+const client = new Postal.Client(POSTAL_ADDRESS, POSTAL_API_KEY);
+
 
 const sendEmail = async (email: string, data: any) => {
     try {
@@ -12,27 +14,14 @@ If there is a problem with exported article, please notify us by sending a messa
 
 If you found this website helpful, please consider donating to us to keep it running. You can donate via <a href="https://buymeacoffee.com/bagheriali2001">Buy Me a Coffee</a> or <a href="https://zarinp.al/bagheriali2001">ZarinPal</a> or you can donate to this USDT address: <b>T9zsTLCF3XW9po3NHnJ1a3ob2YqsccEE8s</b> in TRC20 network.`;
 
-        await axios({
-            method: "POST",
-            url: "https://api.mailersend.com/v1/email",
-            headers: {
-                Authorization: `Bearer ${MAILSENDER_API_TOKEN}`,
-            },
-            data: {
-                from: {
-                    email: MAILSENDER_EMAIL,
-                    name: "Article Exporter",
-                },
-                to: [
-                    {
-                        email: email,
-                        name: email,
-                    },
-                ],
-                subject: "Your Article is Ready!",
-                html: textHTML,
-            },
-        });
+        const message = new Postal.SendMessage(client);
+
+        message.to(email);
+        message.from(POSTAL_EMAIL);
+        message.subject("Your Article is Ready!");
+        message.htmlBody(textHTML);
+
+        await message.send();
     } catch (error) {
         console.log("Error in sending email: ", error)
         throw error;
