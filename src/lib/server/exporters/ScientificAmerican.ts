@@ -27,10 +27,17 @@ const extractCategory = async (text: string) => {
 
 const exportScientificAmerican = async (url: string) : Promise<{categories: string[], slug: string, title: string, file_path_url: string}> => {
     try {
-        const browser = puppeteer.launch({headless: "new"});
+        const browser = await puppeteer.launch({
+            headless: "new",
+            args: [
+                '--no-sandbox',
+                '--disable-gpu',
+            ]
+        });
 
         const page = await (await browser).newPage();
 
+        console.log("Going to:", url);
         await page.goto(url, { timeout: 0 });
 
         // find script with id __DATA__
@@ -79,6 +86,7 @@ const exportScientificAmerican = async (url: string) : Promise<{categories: stri
             }
         }
 
+        console.log("Saving to:", file_path);
         await page.pdf({
             path: file_path,
             format: 'A4',

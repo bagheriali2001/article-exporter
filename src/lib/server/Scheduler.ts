@@ -70,18 +70,18 @@ async function exporting() {
 function startExporting() {
     if (!isRunning) {
         isRunning = true;
-        console.log("Logging started.");
+        console.log("Exporting started.");
     } else {
-        console.log("Logging is already running.");
+        console.log("Exporting is already running.");
     }
 }
 
 function stopExporting() {
     if (isRunning) {
         isRunning = false;
-        console.log("Logging stopped.");
+        console.log("Exporting stopped.");
     } else {
-        console.log("No active logging to stop.");
+        console.log("No active exporting to stop.");
     }
 }
 

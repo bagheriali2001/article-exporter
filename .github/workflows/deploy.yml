@@ -14,6 +14,9 @@ jobs:
       - name: Add Envs 📝
         run: echo "${{ vars.ENV_FILE }}" > .env
 
-      - name: Install, Build and Deploy 🔧 🚀
-        run: docker compose up -d --build
+      - name: Install and Build 🔧 
+        run: docker build -t article-exporter:latest .
+
+      - name: Deploy 🚀
+        run: docker compose up -d --force-recreate
         
