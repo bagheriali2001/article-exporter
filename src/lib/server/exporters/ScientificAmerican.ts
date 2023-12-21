@@ -59,12 +59,10 @@ const exportScientificAmerican = async (url: string) : Promise<{categories: stri
 
         slug = slug.replace(/-/g, "_");
 
-        // if static/articles folder doesnt exist make it
         if(!fs.existsSync(path.join(__dirname, `static/articles`))){
             fs.mkdirSync(path.join(__dirname, `static/articles`))
         }
 
-        // Set the clip area to include only the article content
         let file_path = path.join(__dirname, `static/articles/scientific_american-${slug}.pdf`);
         let file_path_url = `articles/scientific_american-${slug}.pdf`;
         while (fs.existsSync(file_path)) {
@@ -93,7 +91,6 @@ const exportScientificAmerican = async (url: string) : Promise<{categories: stri
         return {categories, slug, title, file_path_url};
     } catch (error) {
         console.error(error);
-        // await (await browser).close();
         throw error;
     }
 }

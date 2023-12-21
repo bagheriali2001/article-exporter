@@ -1,7 +1,8 @@
 import { json } from '@sveltejs/kit';
-import { Article } from '$lib/server/DB'
+import { Article, DbInit } from '$lib/server/DB'
 
 export async function GET() {
+	DbInit();
 	try {
 		const articles = await Article.findAll({
 			attributes: ["categories"],
@@ -13,7 +14,7 @@ export async function GET() {
 		}
 		categories = [...new Set(categories)];
 
-		return json(categories);
+		return json({categories});
 	} catch (error) {
 		console.error("Error:", error);
 		return json({ error: error }, { status: 500 });

@@ -9,7 +9,6 @@ async function exporting() {
     while (true){
         if (isRunning) {
             try {
-                const startTime = new Date().getTime();
                 const queue_size = await ExportQueue.count();
                 console.log("Queue size:", queue_size);
 
@@ -29,7 +28,6 @@ async function exporting() {
                             await queue_item.destroy();
                             console.log("Already exist.");
                         } else {
-                            // TODO: RUN THE EXPORTER HERE
                             const urlObject = new URL(queue_item.url);
                             const website = urlObject.hostname;
 
@@ -40,15 +38,15 @@ async function exporting() {
                                     website: 'Scientific American',
                                     url: queue_item.url,
                                     name: title,
-                                    categories: categories,
-                                    files: [file_path_url]
+                                    categories: JSON.stringify(categories),
+                                    files: JSON.stringify([file_path_url])
                                 });
-
+                                
                                 console.log("Sending email...");
-                                console.log("queue_item.email:", queue_item.emails);
+                                const emails = queue_item.emails ? JSON.parse(queue_item.emails) : [];
 
-                                if (queue_item.emails) {
-                                    for (let email of queue_item.emails) {
+                                if (emails.length > 0) {
+                                    for (let email of emails) {
                                         await sendEmail(email, {
                                             title: title,
                                             full_link: `${BASE_URL}${file_path_url}`
@@ -58,7 +56,6 @@ async function exporting() {
 
                                 await queue_item.destroy();
                             }
-                            console.log("Created.");
                         }
                     }
                 }
@@ -66,7 +63,7 @@ async function exporting() {
                 console.error("ERROR in scheduler:", error);
             }
         }
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        await new Promise(resolve => setTimeout(resolve, 10000));
     }
 }
 

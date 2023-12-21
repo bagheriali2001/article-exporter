@@ -1,0 +1,19 @@
+name: Build and Deploy
+run-name: Updated by ${{ github.actor }}.
+on: 
+  push:
+    branches:    
+      - main
+jobs:
+  update-docker-container:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Add Envs 📝
+        run: echo "${{ vars.ENV_FILE }}" > .env
+
+      - name: Install, Build and Deploy 🔧 🚀
+        run: docker compose up -d --build
+        
