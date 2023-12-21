@@ -1,5 +1,5 @@
 # FROM node:18.14.2
-FROM node
+FROM node:16.14.2
 RUN mkdir -p /home/node/app
 WORKDIR /home/node/app
 COPY ./package.json ./
